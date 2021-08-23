@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <title>Telegram 2.0</title>
+</head>
+
+<body>
+    <% if(error) { %>
+        <div class="alert alert-danger" role="alert">
+            <%= error %>
+        </div>
+    <% } %>
+    <form id="authForm" action="/auth/register" method="POST">
+        <div class="form-group">
+            <label for="emailInput">Email</label>
+            <input name="email" type="text" class="form-control" id="emailInput" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+            <label for="inputPassword">Password</label>
+            <input name="password" type="password" class="form-control" id="inputPassword" placeholder="Password">
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+    <form action="/auth/login-form" method="GET">
+        <button type="submit" class="btn btn-primary" style="margin-top: 5pt">Login</button>
+    </form>
+</body>
+
+</html>

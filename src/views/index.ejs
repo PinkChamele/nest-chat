@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <title>Telegram 2.0</title>
+</head>
+
+<body>
+    <main>
+        <header>
+            <form action="/auth/logout" method="POST">
+                <button id="logout_button" class="btn btn-primary mb-2 float-right" type="submit">Logout</button>
+            </form>
+            <form action="/room/join-room" method="GET">
+                <button id="join_room_button" class="btn btn-primary mb-2 float-right" type="submit">Join room</button>
+            </form>
+            <form action="/room/create-room-form" method="GET">
+                <button id="create_room_button" class="btn btn-primary mb-2 float-right" type="submit">Create room</button>
+            </form>
+        </header>
+        <div id="room_block">
+            <div id="room_list" class="list-group">
+                <% rooms.forEach(room => { %>
+                    <a href="./?room=<%= room._id %>">
+                        <div id="room_<%= room._id %>"
+                            class="list-group-item <%= (room._id == options.currentRoom)? "active" : "" %>" 
+                        >
+                            <%= room.name %>
+                        </div>
+                    </a>
+                <% }); %>
+            </div>
+        </div>
+        <div class="message_block">
+            <form autocomplete="off" id="message_form" class="form-inline">
+                <div class="form-group mx-sm-3 mb-2">
+                    <input type="text" id="message_input" class="form-control" required placeholder="Type a message" />
+                </div>
+                <button class="btn btn-primary mb-2" type="submit">Enter</button>
+            </form>
+            <ul id="message_container" class="list-group list-group-flush"></ul>
+        </div>
+    </main>
+    <script src="https://cdn.socket.io/4.1.2/socket.io.min.js"
+        integrity="sha384-toS6mmwu70G0fw54EGlWWeA4z3dyJ+dlXBtSURSKN4vyRFOcxd3Bzjj/AoOwY+Rg"
+        crossorigin="anonymous"></script>
+    <script>
+        const currentRoom = "<%= options.currentRoom %>";
+    </script>
+    <script src="../../scripts/script.js"></script>
+</body>
+
+</html>

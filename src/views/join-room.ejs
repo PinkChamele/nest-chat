@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <title>Document</title>
+</head>
+<body>
+    <div id="room_block">
+        <div id="room_list" class="list-group">
+            <% rooms.forEach(room => { %>
+                <form action="/room/addUser" method="POST">
+                    <input name="userId" style="visibility: hidden;" value="<%= userId %>">
+                    <input name="roomId" style="visibility: hidden;" value="<%= room._id %>">
+                    <button class="btn btn-primary" style="margin-bottom: 5pt;">
+                        <%= room.name %>
+                    </button>
+                </form>
+            <% }); %>
+        </div>
+    </div>
+</body>
+</html>

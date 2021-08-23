@@ -1,0 +1,32 @@
+body {
+	padding: 1rem;
+	box-sizing: border-box;
+	height: 100vh;
+}
+main {
+	height: 70%;
+	height: calc(70% - 3rem);
+}
+
+main > * {
+	display: inline-block;
+	vertical-align: top;
+}
+
+a, a:hover, a:focus, a:active {
+	text-decoration: none !important;
+	color: #404850 !important;
+}
+
+header > * {
+	display: inline-block;
+}
+
+.room_block {
+	margin-right: 1.2rem;
+}
+
+.message_block {
+	margin-left: 1.2rem;
+	display: inline-block;
+}
