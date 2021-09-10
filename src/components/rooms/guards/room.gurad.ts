@@ -22,6 +22,7 @@ export class RoomGuard implements CanActivate {
   }
 }
 
+// argument types
 function validateRequest(request: any, room): boolean {
   const userId = new Types.ObjectId(request.session.user._id);
   const doesIcludeUser = room
@@ -35,3 +36,13 @@ function validateRequest(request: any, room): boolean {
   }
   throw new ForbiddenException();
 }
+
+/* const doesIcludeUser = room?.users.some(function (user) {
+  return user.equals(userId);
+});
+
+if (doesIcludeUser) {
+  return doesIcludeUser;
+} else {
+  throw new ForbiddenException();
+} */

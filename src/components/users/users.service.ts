@@ -11,8 +11,10 @@ export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async create(createUserDto: CreateUserDto): Promise<User> {
+    // empty line after var
     const newUser = new this.userModel(createUserDto);
     newUser.password = await bcrypt.hash(newUser.password, 13);
+    // empty line before return
     return newUser.save();
   }
 
@@ -24,8 +26,10 @@ export class UsersService {
     return this.userModel.findOne({ email }).lean().exec();
   }
 
+  // no arguments types
   async updatePasswordByEmail(email, password): Promise<PublicUser> {
     const passwordHash = await bcrypt.hash(password, 13);
+    // different style
     return this.userModel
       .findOneAndUpdate({ email }, { password: passwordHash })
       .lean()
