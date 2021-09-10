@@ -21,7 +21,9 @@ export class RoomsService {
     return this.roomModel.findById(roomId).lean().exec();
   }
 
+  // argument types
   async addUser(roomId, userId): Promise<UpdateWriteOpResult> {
+    // remove comments
     /* const room = await this.roomModel.findById(roomId);
 
     room.users.push(userId);
@@ -32,7 +34,10 @@ export class RoomsService {
     );
   }
 
+  // argument types
   async getAllByUser(userId): Promise<Room[]> {
+    // rewrite with
+    // https://docs.mongodb.com/manual/reference/operator/aggregation/lookup/
     return this.roomModel
       .find({ users: userId })
       .populate('users', { password: -1 })

@@ -12,6 +12,9 @@ export class User {
 
   @Prop()
   password: string;
+
+  // timestamp
+  // createdAt updatedAt
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

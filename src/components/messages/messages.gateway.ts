@@ -28,6 +28,10 @@ export class MessagesGateway {
       'message',
       await this.messagesSerivce.getById(newMessage._id),
     );
+    // add try catch and send error
+    /* this.server.emit(
+      'errorMessage',
+    ); */
   }
 
   @SubscribeMessage('getAllMessages')

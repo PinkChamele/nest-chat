@@ -33,6 +33,7 @@ export class AuthRenderController {
   @UseGuards(AuthGuard('local'))
   @UseFilters(UnauthorizedExceptionFilter)
   async login(
+    // @SessionUser() user
     @Request() req,
     @Session() session: Record<string, any>,
     @Res() res,
@@ -59,6 +60,8 @@ export class AuthRenderController {
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto, @Res() res) {
+    // 1. business logic
+    // 2. redirect
     res.redirect('/auth/login-form/');
     return this.authService.register(createUserDto);
   }

@@ -44,6 +44,7 @@ export class AuthController {
       { expiresIn: '1h' },
     );
 
+    // wait promise or catch errors
     this.mailerService.sendMail({
       to: email,
       from: process.env.SENDGRID_FROM_EMAIL,
