@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import {
   ConnectedSocket,
   MessageBody,
@@ -7,31 +8,35 @@ import {
 } from '@nestjs/websockets';
 import { Types } from 'mongoose';
 import { Socket } from 'socket.io';
-import { ParseObjectIdPipe } from 'src/components/common/parse-object-id-pipe';
-import { CreateMessageDto } from './dto/create-message.dto';
-import { MessagesService } from './messages.service';
+import ParseObjectIdPipe from 'src/components/common/pipes/parse-object-id-pipe';
+import CreateMessageDto from './dto/create-message.dto';
+import MessagesService from './messages.service';
 
 @WebSocketGateway()
-export class MessagesGateway {
+export default class MessagesGateway {
   constructor(private readonly messagesSerivce: MessagesService) {}
 
   @WebSocketServer()
   server;
 
   @SubscribeMessage('sendMessage')
-  async sendMessage(@MessageBody() message: CreateMessageDto): Promise<void> {
-    const newMessage = await this.messagesSerivce.create({
-      ...message,
-      room: new Types.ObjectId(message.room),
-    });
-    this.server.emit(
-      'message',
-      await this.messagesSerivce.getById(newMessage._id),
-    );
-    // add try catch and send error
-    /* this.server.emit(
-      'errorMessage',
-    ); */
+  async sendMessage(
+    @MessageBody() message: CreateMessageDto,
+    @ConnectedSocket() client: Socket,
+  ): Promise<void> {
+    try {
+      const newMessage = await this.messagesSerivce.create({
+        ...message,
+        room: message.room,
+      });
+
+      this.server.emit(
+        'message',
+        await this.messagesSerivce.getById(newMessage._id),
+      );
+    } catch (exception) {
+      client.emit('error');
+    }
   }
 
   @SubscribeMessage('getAllMessages')
@@ -40,6 +45,6 @@ export class MessagesGateway {
     @ConnectedSocket() client: Socket,
   ): Promise<void> {
     const messages = await this.messagesSerivce.getAllByRoomId(room);
-    this.server.to(client.id).emit('allMessages', messages);
+    client.emit('allMessages', messages);
   }
 }

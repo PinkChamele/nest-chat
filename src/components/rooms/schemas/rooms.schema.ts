@@ -4,7 +4,7 @@ import { User } from 'src/components/users/schemas/users.schema';
 
 export type RoomDocument = Room & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class Room {
   _id: Types.ObjectId;
 

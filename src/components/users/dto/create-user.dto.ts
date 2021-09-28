@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongoose';
 
-export class CreateUserDto {
+export default class CreateUserDto {
   readonly login: string;
 
   readonly password: ObjectId;

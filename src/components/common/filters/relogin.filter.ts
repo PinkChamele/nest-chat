@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import {
   Catch,
   ExceptionFilter,
@@ -6,7 +7,7 @@ import {
 } from '@nestjs/common';
 
 @Catch(UnauthorizedException)
-export class UnauthorizedExceptionFilter implements ExceptionFilter {
+export default class UnauthorizedExceptionFilter implements ExceptionFilter {
   catch(exception: any, host: ArgumentsHost) {
     const res = host.switchToHttp().getResponse();
 

@@ -10,7 +10,7 @@
 </head>
 <body>
     <label for="sendAgain">Email sent</label>
-    <form action="/auth/email-send" method="POST">
+    <form action="/auth-render/email-send" method="POST">
         <input type="text" name="email" style="visibility: hidden;" value="<%= email %>">
         <button type="submit" class="btn btn-primary" id="sendAgain">Send again</button>
     </form>

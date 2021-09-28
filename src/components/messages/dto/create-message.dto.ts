@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
 
-export class CreateMessageDto {
+export default class CreateMessageDto {
   readonly text: string;
 
   readonly author: Types.ObjectId;

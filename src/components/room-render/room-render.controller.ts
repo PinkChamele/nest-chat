@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-underscore-dangle */
 import {
   Controller,
   Get,
@@ -9,22 +12,26 @@ import {
   Body,
   Res,
 } from '@nestjs/common';
-import { LoginGuard } from 'src/components/auth/guards/login.gurad';
-import { AddUserDto } from 'src/components/rooms/dto/add-user.dto';
-import { CreateRoomDto } from 'src/components/rooms/dto/create-room.dto';
-import { RoomGuard } from 'src/components/rooms/guards/room.gurad';
-import { RoomsService } from 'src/components/rooms/rooms.service';
+import { Types } from 'mongoose';
+import LoginGuard from 'src/components/common/guards/login.gurad';
+import AddUserDto from 'src/components/rooms/dto/add-user.dto';
+import CreateRoomDto from 'src/components/rooms/dto/create-room.dto';
+import RoomGuard from 'src/components/common/guards/room.gurad';
+import RoomsService from 'src/components/rooms/rooms.service';
 import { User } from 'src/components/users/schemas/users.schema';
 
-@Controller('room')
-export class RoomRenderController {
+@Controller('room-render')
+export default class RoomRenderController {
   constructor(private readonly roomsService: RoomsService) {}
 
   @Get()
   @Render('index')
   @UseGuards(LoginGuard, RoomGuard)
   async root(@Session() { user }: { user: User }, @Query('room') currentRoom) {
-    const rooms = await this.roomsService.getAllByUser(user._id);
+    const rooms = await this.roomsService.getAllByUser(
+      new Types.ObjectId(user._id),
+    );
+
     return {
       rooms,
       options: {
@@ -48,15 +55,13 @@ export class RoomRenderController {
   @UseGuards(LoginGuard)
   async addUser(@Body() addUserDto: AddUserDto, @Res() res) {
     await this.roomsService.addUser(addUserDto.roomId, addUserDto.userId);
-    res.redirect(`/room/?room=${addUserDto.roomId}`);
+    res.redirect(`/room-render/?room=${addUserDto.roomId}`);
   }
 
   @Get('create-room-form')
   @Render('create-room')
   @UseGuards(LoginGuard)
-  async createRoomForm() {
-    return;
-  }
+  async createRoomForm() {}
 
   @Post('create-room')
   @UseGuards(LoginGuard)
@@ -67,6 +72,6 @@ export class RoomRenderController {
   ) {
     const createdRoom = await this.roomsService.create(createRoomDto);
     await this.roomsService.addUser(createdRoom._id, user._id);
-    res.redirect(`/room/?room=${createdRoom._id}`);
+    res.redirect(`/room-render/?room=${createdRoom._id}`);
   }
 }

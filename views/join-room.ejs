@@ -12,7 +12,7 @@
     <div id="room_block">
         <div id="room_list" class="list-group">
             <% rooms.forEach(room => { %>
-                <form action="/room/addUser" method="POST">
+                <form action="/room-render/addUser" method="POST">
                     <input name="userId" style="visibility: hidden;" value="<%= userId %>">
                     <input name="roomId" style="visibility: hidden;" value="<%= room._id %>">
                     <button class="btn btn-primary" style="margin-bottom: 5pt;">

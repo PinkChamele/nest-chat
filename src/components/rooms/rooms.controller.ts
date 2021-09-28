@@ -1,13 +1,16 @@
 import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { Types, UpdateWriteOpResult } from 'mongoose';
-import { CreateRoomDto } from './dto/create-room.dto';
+import ParseObjectIdPipe from 'src/components/common/pipes/parse-object-id-pipe';
+import CreateRoomDto from './dto/create-room.dto';
 import { Room } from './schemas/rooms.schema';
-import { RoomsService } from './rooms.service';
-import { ParseObjectIdPipe } from 'src/components/common/parse-object-id-pipe';
-import { AddUserDto } from './dto/add-user.dto';
+import RoomsService from './rooms.service';
+import AddUserDto from './dto/add-user.dto';
 
-@Controller('v1/rooms')
-export class RoomsController {
+@Controller({
+  path: 'rooms',
+  version: '1',
+})
+export default class RoomsController {
   constructor(private readonly roomsSerivce: RoomsService) {}
 
   @Post()
@@ -17,10 +20,7 @@ export class RoomsController {
 
   @Post('addUser')
   async addUser(@Body() addUserDto: AddUserDto): Promise<UpdateWriteOpResult> {
-    return await this.roomsSerivce.addUser(
-      addUserDto.roomId,
-      addUserDto.userId,
-    );
+    return this.roomsSerivce.addUser(addUserDto.roomId, addUserDto.userId);
   }
 
   @Get('getAll')

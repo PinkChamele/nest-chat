@@ -1,25 +1,27 @@
-import { Injectable } from '@nestjs/common';
-import { UsersService } from 'src/components/users/users.service';
+/* eslint-disable class-methods-use-this */
+import { Injectable, NotFoundException } from '@nestjs/common';
+import UsersService from 'src/components/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/components/users/schemas/users.schema';
-import { NotFoundException } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
 import { JwtService } from '@nestjs/jwt';
-import { CreateUserDto } from 'src/components/users/dto/create-user.dto';
+import CreateUserDto from 'src/components/users/dto/create-user.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class AuthService {
+export default class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async validateUser(
     email: string,
     password: string,
   ): Promise<Omit<User, 'password'> | null> {
-    const user = await this.usersService.findOneByEmail(email);
+    const user = await this.usersService.findOneByEmailWithPassword(email);
     const check = await bcrypt.compare(password, user.password);
 
     if (check) {
@@ -43,13 +45,13 @@ export class AuthService {
 
     this.mailerService.sendMail({
       to: email,
-      from: process.env.SENDGRID_FROM_EMAIL,
+      from: this.configService.get('sendgrid.fromEmail'),
       subject: 'Confirm reset password',
       template: './reset-password',
       context: {
         token,
         email,
-        host: process.env.HOST_NAME,
+        host: this.configService.get('host'),
       },
     });
   }

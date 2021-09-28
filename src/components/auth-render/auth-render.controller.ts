@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
+/* eslint-disable no-param-reassign */
+/* eslint-disable class-methods-use-this */
 import {
   Controller,
   Get,
@@ -14,13 +17,13 @@ import {
   Req,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { AuthService } from 'src/components/auth/auth.service';
-import { UnauthorizedExceptionFilter } from './filters/relogin.filter';
-import { CreateUserDto } from 'src/components/users/dto/create-user.dto';
-import { SendEmailDto } from './dto/send-email.dto';
+import AuthService from 'src/components/auth/auth.service';
+import CreateUserDto from 'src/components/users/dto/create-user.dto';
+import UnauthorizedExceptionFilter from '../common/filters/relogin.filter';
+import SendEmailDto from './dto/send-email.dto';
 
-@Controller('auth')
-export class AuthRenderController {
+@Controller('auth-render')
+export default class AuthRenderController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('login-form')
@@ -42,7 +45,7 @@ export class AuthRenderController {
       throw new UnauthorizedException();
     }
     session.user = req.user;
-    res.redirect('/room/');
+    res.redirect('/room-render/');
     return req.user;
   }
 
@@ -55,22 +58,20 @@ export class AuthRenderController {
   @Post('logout')
   async logout(@Res() res, @Req() req) {
     await this.authService.logout(req.session);
-    res.redirect('/auth/login-form/');
+    res.redirect('/auth-render/login-form/');
   }
 
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto, @Res() res) {
-    // 1. business logic
-    // 2. redirect
-    res.redirect('/auth/login-form/');
-    return this.authService.register(createUserDto);
+    const newUser = await this.authService.register(createUserDto);
+
+    res.redirect('/auth-render/login-form/');
+    return newUser;
   }
 
   @Get('forgot-password')
   @Render('./password-reset/forgot-password')
-  async sendResetEmail() {
-    return;
-  }
+  async sendResetEmail() {}
 
   @Post('email-send')
   @Render('./password-reset/email-sent')

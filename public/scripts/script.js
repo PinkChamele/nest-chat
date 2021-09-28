@@ -1,10 +1,11 @@
+/* eslint-disable no-undef */
 const socket = io();
 
 let user = null;
 // let chatContainer = document.getElementById('chat_list');
-let messageContainer = document.getElementById('message_container');
-let messageForm = document.getElementById('message_form');
-let inputField = document.getElementById('message_input');
+const messageContainer = document.getElementById('message_container');
+const messageForm = document.getElementById('message_form');
+const inputField = document.getElementById('message_input');
 
 function sendMessage(text, author, room) {
   socket.emit('sendMessage', {
@@ -41,10 +42,23 @@ function showMessage(data) {
   }
 }
 
+function showErrorMessage() {
+  messageContainer.innerHTML += `<li class="list-group-item">
+    ${user.email}: "Message not delivered"
+  </li>`;
+}
+
+function handleErrorMessage(handler) {
+  socket.on('error', () => {
+    handler();
+  });
+}
+
 async function setUser() {
   user = await (await fetch(`/v1/auth/self`, { method: 'GET' })).json();
 }
 
+handleErrorMessage(showErrorMessage);
 handleMessage(showMessage);
 handleMessageList((data) =>
   data.forEach((message) => {

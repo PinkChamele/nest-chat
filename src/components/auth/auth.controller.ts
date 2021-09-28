@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-param-reassign */
 import {
   Controller,
   Post,
@@ -11,17 +13,22 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { MailerService } from '@nestjs-modules/mailer';
-import { CreateUserDto } from 'src/components/users/dto/create-user.dto';
-import { UsersService } from 'src/components/users/users.service';
-import { LoginGuard } from './guards/login.gurad';
+import CreateUserDto from 'src/components/users/dto/create-user.dto';
+import UsersService from 'src/components/users/users.service';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import LoginGuard from '../common/guards/login.gurad';
 
-@Controller('v1/auth')
-export class AuthController {
+@Controller({
+  path: 'auth',
+  version: '1',
+})
+export default class AuthController {
   constructor(
     private readonly usersService: UsersService,
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   @Post('login')
@@ -44,16 +51,15 @@ export class AuthController {
       { expiresIn: '1h' },
     );
 
-    // wait promise or catch errors
-    this.mailerService.sendMail({
+    await this.mailerService.sendMail({
       to: email,
-      from: process.env.SENDGRID_FROM_EMAIL,
+      from: this.configService.get('sendgrid.fromEmail'),
       subject: 'Confirm reset password',
       template: './reset-password',
       context: {
         token,
         email,
-        host: process.env.HOST_NAME,
+        host: this.configService.get('host'),
       },
     });
   }

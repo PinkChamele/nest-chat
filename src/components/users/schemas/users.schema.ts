@@ -1,20 +1,19 @@
-import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
+import { Exclude } from 'class-transformer';
 
 export type UserDocument = User & Document;
 
-@Schema()
+@Schema({ timestamps: true })
 export class User {
   _id: Types.ObjectId;
 
   @Prop()
   email: string;
 
-  @Prop()
+  @Exclude()
+  @Prop({ select: false })
   password: string;
-
-  // timestamp
-  // createdAt updatedAt
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

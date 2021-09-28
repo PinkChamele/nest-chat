@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { RoomsService } from './rooms.service';
-import { RoomsController } from './rooms.controller';
 import { MongooseModule } from '@nestjs/mongoose/dist/mongoose.module';
+import RoomsService from './rooms.service';
+import RoomsController from './rooms.controller';
 import { Room, RoomSchema } from './schemas/rooms.schema';
 
 @Module({
@@ -12,4 +12,4 @@ import { Room, RoomSchema } from './schemas/rooms.schema';
   ],
   exports: [RoomsService],
 })
-export class RoomsModule {}
+export default class RoomsModule {}

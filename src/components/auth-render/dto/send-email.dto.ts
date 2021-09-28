@@ -1,3 +1,3 @@
-export class SendEmailDto {
+export default class SendEmailDto {
   readonly email;
 }

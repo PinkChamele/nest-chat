@@ -16,7 +16,7 @@
             <%= error %>
         </div>
     <% } %>
-    <form id="authForm" action="/auth/login" method="POST">
+    <form id="authForm" action="/auth-render/login" method="POST">
         <div class="form-group">
             <label for="emailInput">Email</label>
             <input name="email" type="text" class="form-control" id="emailInput" placeholder="Enter email">
@@ -27,10 +27,10 @@
         </div>
         <button type="submit" class="btn btn-primary">Login</button>
     </form>
-    <form action="/auth/forgot-password" method="GET">
+    <form action="/auth-render/forgot-password" method="GET">
         <button type="submit" class="btn btn-primary" style="margin-top: 5pt">Forgot password</button>
     </form>
-    <form action="/auth/register-form" method="GET">
+    <form action="/auth-render/register-form" method="GET">
         <button type="submit" class="btn btn-primary" style="margin-top: 5pt">Register</button>
     </form>
 </body>
