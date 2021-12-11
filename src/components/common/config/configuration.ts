@@ -12,7 +12,7 @@ export default () => ({
   session: {
     secret: process.env.SESSION_SECRET,
   },
-  snedgirid: {
+  sendgrid: {
     apiKey: process.env.SENDGRID_API_KEY,
     fromEmail: process.env.SENDGRID_FROM_EMAIL,
     username: process.env.SENDFRID_USERNAME,

@@ -4,7 +4,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EjsAdapter } from '@nestjs-modules/mailer/dist/adapters/ejs.adapter';
-import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import AuthRenderModule from './components/auth-render/auth-render.module';
 import AuthModule from './components/auth/auth.module';
@@ -20,7 +19,6 @@ import configuration from './components/common/config/configuration';
     MessagesModule,
     RoomsModule,
     AuthModule,
-    PassportModule,
     ConfigModule.forRoot({
       load: [configuration],
     }),

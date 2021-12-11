@@ -8,7 +8,7 @@ export type UserDocument = User & Document;
 export class User {
   _id: Types.ObjectId;
 
-  @Prop()
+  @Prop({ unique: true })
   email: string;
 
   @Exclude()

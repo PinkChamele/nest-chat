@@ -27,7 +27,7 @@ export default class MessagesGateway {
     try {
       const newMessage = await this.messagesSerivce.create({
         ...message,
-        room: message.room,
+        room: new Types.ObjectId(message.room),
       });
 
       this.server.emit(
