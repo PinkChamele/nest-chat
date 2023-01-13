@@ -33,6 +33,7 @@
     "@nestjs/platform-express": "8.0.0",
     "@nestjs/platform-socket.io": "8.0.6",
     "@nestjs/serve-static": "2.2.2",
+    "@nestjs/swagger": "^5.1.5",
     "@nestjs/websockets": "8.0.6",
     "@sendgrid/mail": "7.4.6",
     "@types/socket.io": "3.0.2",
@@ -52,7 +53,8 @@
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "7.2.0",
-    "socket.io": "4.1.3"
+    "socket.io": "4.1.3",
+    "swagger-ui-express": "^4.3.0"
   },
   "devDependencies": {
     "@nestjs/cli": "8.0.0",

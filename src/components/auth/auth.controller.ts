@@ -17,18 +17,23 @@ import CreateUserDto from 'src/components/users/dto/create-user.dto';
 import UsersService from 'src/components/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { ApiExtraModels } from '@nestjs/swagger';
 import LoginGuard from '../common/guards/login.gurad';
+import AuthService from './auth.service';
+import { User } from '../users/schemas/users.schema';
 
 @Controller({
   path: 'auth',
   version: '1',
 })
+@ApiExtraModels(User)
 export default class AuthController {
   constructor(
     private readonly usersService: UsersService,
     private readonly mailerService: MailerService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly authService: AuthService,
   ) {}
 
   @Post('login')
@@ -39,9 +44,9 @@ export default class AuthController {
   }
 
   @Post('send-reset-email')
-  async resetPassword(@Body() { email }) {
+  async resetPassword(@Body() body) {
+    const { email } = body;
     const user = await this.usersService.findOneByEmail(email);
-
     if (!user) {
       throw new NotFoundException();
     }
@@ -59,7 +64,7 @@ export default class AuthController {
       context: {
         token,
         email,
-        host: this.configService.get('host'),
+        // host: this.configService.get('host'),
       },
     });
   }
@@ -78,13 +83,13 @@ export default class AuthController {
   }
 
   @Post('register')
-  async register(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async register(@Body() createUserDto: CreateUserDto): Promise<User> {
+    return this.authService.register(createUserDto);
   }
 
   @Post('logout')
   async logout(@Request() req) {
-    req.session.destroy(null);
+    this.authService.logout(req.session);
   }
 
   @Get('self')

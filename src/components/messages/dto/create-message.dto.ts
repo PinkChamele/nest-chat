@@ -6,6 +6,4 @@ export default class CreateMessageDto {
   readonly author: Types.ObjectId;
 
   readonly room: Types.ObjectId;
-
-  readonly date: Date;
 }

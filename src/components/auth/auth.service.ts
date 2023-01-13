@@ -1,5 +1,9 @@
 /* eslint-disable class-methods-use-this */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import UsersService from 'src/components/users/users.service';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/components/users/schemas/users.schema';
@@ -22,12 +26,17 @@ export default class AuthService {
     password: string,
   ): Promise<Omit<User, 'password'> | null> {
     const user = await this.usersService.findOneByEmailWithPassword(email);
-    const check = await bcrypt.compare(password, user.password);
 
-    if (check) {
-      delete user.password;
-      return user;
+    if (user) {
+      const check = await bcrypt.compare(password, user.password);
+
+      if (check) {
+        delete user.password;
+
+        return user;
+      }
     }
+
     return null;
   }
 
@@ -57,7 +66,15 @@ export default class AuthService {
   }
 
   async register(createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    console.log(
+      createUserDto,
+      !(await this.usersService.findOneByEmail(createUserDto.email)),
+    );
+
+    if (!(await this.usersService.findOneByEmail(createUserDto.email))) {
+      return this.usersService.create(createUserDto);
+    }
+    throw new UnauthorizedException();
   }
 
   async logout(session) {

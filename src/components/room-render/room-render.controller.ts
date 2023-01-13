@@ -14,7 +14,7 @@ import {
 } from '@nestjs/common';
 import { Types } from 'mongoose';
 import LoginGuard from 'src/components/common/guards/login.gurad';
-import AddUserDto from 'src/components/rooms/dto/add-user.dto';
+import JoinRoomDto from 'src/components/rooms/dto/add-user.dto';
 import CreateRoomDto from 'src/components/rooms/dto/create-room.dto';
 import RoomGuard from 'src/components/common/guards/room.gurad';
 import RoomsService from 'src/components/rooms/rooms.service';
@@ -51,12 +51,12 @@ export default class RoomRenderController {
     };
   }
 
-  @Post('addUser')
-  @UseGuards(LoginGuard)
-  async addUser(@Body() addUserDto: AddUserDto, @Res() res) {
-    await this.roomsService.addUser(addUserDto.roomId, addUserDto.userId);
-    res.redirect(`/room-render/?room=${addUserDto.roomId}`);
-  }
+  // @Post('addUser')
+  // @UseGuards(LoginGuard)
+  // async addUser(@Body() addUserDto: JoinRoomDto, @Res() res) {
+  //   await this.roomsService.addUser(addUserDto.roomId, addUserDto.userId);
+  //   res.redirect(`/room-render/?room=${addUserDto.roomId}`);
+  // }
 
   @Get('create-room-form')
   @Render('create-room')

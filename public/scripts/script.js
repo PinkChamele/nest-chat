@@ -12,7 +12,6 @@ function sendMessage(text, author, room) {
     text,
     author,
     room,
-    date: Date.now(),
   });
 }
 

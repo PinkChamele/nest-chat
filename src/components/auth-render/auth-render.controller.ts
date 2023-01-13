@@ -32,9 +32,9 @@ export default class AuthRenderController {
     return { error };
   }
 
-  @Post('login')
+  @UseFilters(new UnauthorizedExceptionFilter())
   @UseGuards(AuthGuard('local'))
-  @UseFilters(UnauthorizedExceptionFilter)
+  @Post('login')
   async login(
     // @SessionUser() user
     @Request() req,
@@ -64,8 +64,11 @@ export default class AuthRenderController {
   @Post('register')
   async register(@Body() createUserDto: CreateUserDto, @Res() res) {
     const newUser = await this.authService.register(createUserDto);
-
-    res.redirect('/auth-render/login-form/');
+    if (!newUser) {
+      res.redirect('/auth-render/register-form?error=The+user+already+exist!');
+    } else {
+      res.redirect('/auth-render/login-form/');
+    }
     return newUser;
   }
 
@@ -75,9 +78,9 @@ export default class AuthRenderController {
 
   @Post('email-send')
   @Render('./password-reset/email-sent')
-  async emailSent(@Body() { email }: SendEmailDto) {
-    this.authService.resetPassword(email);
-    return { email };
+  async emailSent(@Body() sendEmailDto: SendEmailDto) {
+    this.authService.resetPassword(sendEmailDto.email);
+    return { email: sendEmailDto.email };
   }
 
   @Get('reset-password-form')

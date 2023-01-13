@@ -1,7 +1,5 @@
 import { Types } from 'mongoose';
 
-export default class AddUserDto {
-  readonly userId: Types.ObjectId;
-
+export default class JoinRoomDto {
   readonly roomId: Types.ObjectId;
 }
